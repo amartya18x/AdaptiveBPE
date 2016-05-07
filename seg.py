@@ -6,8 +6,8 @@ from trellis import trellis
 X = T.scalar('X')
 
 def build_trellis(train_data):
-    trellis_G = trellis()
-    return trellis_G
+    trellis_g = trellis()
+    return trellis_g
 def build_lattice_hidden(num_state, dim_state):
     ''' Build the hidden state matrix'''
     hidden_states = theano.shared(np.zeros([num_state, dim_state]))
@@ -29,8 +29,9 @@ def step(hidden_states, t, trellis_G, num_inc,
     out_arcs = trellis_node.out_arcs
     tokens = trellis_node.tokens
     # utility function to slice a tensor
-    def _slice(_x, n, dim):
-        return _x[:, n*dim:(n+1)*dim]
+    def _slice(ten, ind, dim):
+        ''' Access a row of the tensor'''
+        return ten[:, ind*dim:(ind+1)*dim]
     # calculate the current hiddent state
     # Dont do if it is the root or has only one parent
     if num_inc > 1:
