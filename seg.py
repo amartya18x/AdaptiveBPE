@@ -14,8 +14,8 @@ def step(hidden_states, t, num_inc,
     '''hidden_states : A matrix storing the hidden states for all nodes
     t : The current time step
     num_inc : Number of incoming connections
-    tokens : Current token
-    out_arcs : List of outgoing connections
+    tokens : Outgoing edges
+    out_arcs : List of child nodes
     '''
     # utility function to slice a tensor
     def _slice(_x, n, dim):
@@ -26,5 +26,5 @@ def step(hidden_states, t, num_inc,
     prob_s = T.nnet.softmax(T.dot(W2, _slice(hidden_states, t, dim_hid)))
     for out_arc, token in zip(out_arcs, tokens):
         out_state = _slice(hidden_states, t, dim_hid) + W*E[token]
-        hidden_states[out_arc] += out_state
+        hidden_states[out_arc] += T.nnet.sigmoid(out_state)
     return [prob_s]
